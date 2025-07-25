@@ -19,6 +19,13 @@
 - **Status**: ✅ All errors resolved and pushed
 - **Commit**: 6dc4eb6
 
+### 2025-07-25 - Additional TabView Compatibility Fix
+- **Issue**: User reported PageTabViewStyle compilation error
+- **Error**: `'PageTabViewStyle' is unavailable in macOS`
+- **Solution**: Removed iOS-only PageTabViewStyle, using macOS default
+- **Status**: ✅ Fixed and pushed
+- **Commit**: 4205d02
+
 ### Build Fixes Applied
 - ✅ Fixed all Swift compilation errors
 - ✅ Resolved Hashable conformance issues
