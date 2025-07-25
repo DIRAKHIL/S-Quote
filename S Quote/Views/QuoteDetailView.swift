@@ -467,17 +467,17 @@ struct ExportQuoteView: View {
 }
 
 #Preview {
-    let sampleQuote = Quote(
-        event: Event(
-            clientName: "John & Jane Doe",
-            clientEmail: "john.doe@email.com",
-            eventName: "Wedding Reception",
-            eventType: .wedding,
-            venue: "Grand Ballroom",
-            guestCount: 150
-        ),
-        items: []
-    )
+    let sampleQuote: Quote = {
+        var event = Event()
+        event.clientName = "John & Jane Doe"
+        event.clientEmail = "john.doe@email.com"
+        event.eventName = "Wedding Reception"
+        event.eventType = .wedding
+        event.venue = "Grand Ballroom"
+        event.guestCount = 150
+        
+        return Quote(event: event, items: [])
+    }()
     
     QuoteDetailView(quote: sampleQuote, quoteService: QuoteService())
 }
