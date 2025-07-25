@@ -186,8 +186,6 @@ struct EventDetailsStepView: View {
                                     .foregroundColor(.secondary)
                                 TextField("client@email.com", text: $viewModel.currentQuote.event.clientEmail)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .keyboardType(.emailAddress)
-                                    .autocapitalization(.none)
                             }
                         }
                         
@@ -197,7 +195,6 @@ struct EventDetailsStepView: View {
                                 .foregroundColor(.secondary)
                             TextField("+1 (555) 123-4567", text: $viewModel.currentQuote.event.clientPhone)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .keyboardType(.phonePad)
                         }
                     }
                     .padding()
