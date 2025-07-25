@@ -26,107 +26,265 @@ struct NewQuoteView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Progress Indicator
-                ProgressView(value: Double(currentStep + 1), total: Double(steps.count))
-                    .progressViewStyle(LinearProgressViewStyle())
-                    .padding()
-                
-                // Step Indicator
-                HStack {
-                    ForEach(0..<steps.count, id: \.self) { index in
-                        HStack {
-                            Circle()
-                                .fill(index <= currentStep ? Color.blue : Color.gray.opacity(0.3))
-                                .frame(width: 20, height: 20)
-                                .overlay(
-                                    Text("\(index + 1)")
-                                        .font(.caption)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(index <= currentStep ? .white : .gray)
+                // Modern Header with Progress
+                VStack(spacing: 20) {
+                    // Progress Bar
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(height: 4)
+                                .cornerRadius(2)
+                            
+                            Rectangle()
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.blue, Color.purple]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
                                 )
+                                .frame(width: geometry.size.width * CGFloat(currentStep + 1) / CGFloat(steps.count), height: 4)
+                                .cornerRadius(2)
+                                .animation(.easeInOut(duration: 0.3), value: currentStep)
+                        }
+                    }
+                    .frame(height: 4)
+                    
+                    // Step Indicators
+                    HStack {
+                        ForEach(0..<steps.count, id: \.self) { index in
+                            VStack(spacing: 12) {
+                                ZStack {
+                                    Circle()
+                                        .fill(stepBackgroundColor(for: index))
+                                        .frame(width: 50, height: 50)
+                                        .shadow(color: index <= currentStep ? .blue.opacity(0.3) : .clear, radius: 6)
+                                        .scaleEffect(index == currentStep ? 1.1 : 1.0)
+                                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentStep)
+                                    
+                                    if index < currentStep {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 20, weight: .bold))
+                                            .foregroundColor(.white)
+                                    } else {
+                                        Text("\(index + 1)")
+                                            .font(.system(size: 18, weight: .bold))
+                                            .foregroundColor(stepTextColor(for: index))
+                                    }
+                                }
+                                
+                                Text(steps[index])
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(index <= currentStep ? .primary : .secondary)
+                                    .multilineTextAlignment(.center)
+                                    .frame(maxWidth: 80)
+                            }
                             
                             if index < steps.count - 1 {
-                                Rectangle()
-                                    .fill(index < currentStep ? Color.blue : Color.gray.opacity(0.3))
-                                    .frame(height: 2)
+                                Spacer()
                             }
                         }
                     }
-                }
-                .padding(.horizontal)
-                
-                // Step Labels
-                HStack {
-                    ForEach(0..<steps.count, id: \.self) { index in
-                        Text(steps[index])
-                            .font(.caption)
-                            .fontWeight(index == currentStep ? .semibold : .regular)
-                            .foregroundColor(index <= currentStep ? .primary : .secondary)
-                            .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    
+                    // Current Step Title
+                    VStack(spacing: 8) {
+                        Text("Step \(currentStep + 1) of \(steps.count)")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.secondary)
+                        
+                        Text(steps[currentStep])
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.primary)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
+                .padding(.vertical, 30)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(.systemBackground),
+                            Color(.systemGray6).opacity(0.5)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
                 
-                Divider()
-                
-                // Step Content
+                // Content Area
                 TabView(selection: $currentStep) {
-                    EventDetailsStepView(viewModel: viewModel)
-                        .tag(0)
-                    
-                    ItemSelectionStepView(viewModel: viewModel)
-                        .tag(1)
-                    
-                    PricingStepView(viewModel: viewModel)
-                        .tag(2)
-                    
-                    ReviewStepView(viewModel: viewModel)
-                        .tag(3)
-                }
-                
-                Divider()
-                
-                // Navigation Buttons
-                HStack {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Spacer()
-                    
-                    if currentStep > 0 {
-                        Button("Previous") {
-                            withAnimation {
-                                currentStep -= 1
+                    ForEach(0..<steps.count, id: \.self) { index in
+                        Group {
+                            switch index {
+                            case 0:
+                                EventDetailsStepView(viewModel: viewModel)
+                            case 1:
+                                ItemSelectionStepView(viewModel: viewModel)
+                            case 2:
+                                PricingStepView(viewModel: viewModel)
+                            case 3:
+                                ReviewStepView(viewModel: viewModel)
+                            default:
+                                EmptyView()
                             }
                         }
-                        .buttonStyle(.bordered)
-                    }
-                    
-                    if currentStep < steps.count - 1 {
-                        Button("Next") {
-                            withAnimation {
-                                currentStep += 1
-                            }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!canProceedToNextStep)
-                    } else {
-                        Button("Save Quote") {
-                            viewModel.saveQuote()
-                            onSave(viewModel.currentQuote)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!viewModel.isQuoteValid)
+                        .tag(index)
                     }
                 }
-                .padding()
+                .tabViewStyle(DefaultTabViewStyle())
+                
+                // Modern Navigation Footer
+                VStack(spacing: 0) {
+                    Divider()
+                    
+                    HStack(spacing: 20) {
+                        // Previous Button
+                        if currentStep > 0 {
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    currentStep -= 1
+                                }
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 16, weight: .semibold))
+                                    Text("Previous")
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                                .foregroundColor(.blue)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 14)
+                                .background(Color.blue.opacity(0.1))
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        } else {
+                            Spacer()
+                                .frame(width: 100)
+                        }
+                        
+                        Spacer()
+                        
+                        // Next/Create Button
+                        if currentStep < steps.count - 1 {
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    currentStep += 1
+                                }
+                            }) {
+                                HStack(spacing: 8) {
+                                    Text("Next")
+                                        .font(.system(size: 16, weight: .semibold))
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 14)
+                                .background(
+                                    canProceedToNextStep ? 
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.blue, Color.purple]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ) : 
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.gray, Color.gray]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .cornerRadius(12)
+                                .shadow(color: canProceedToNextStep ? .blue.opacity(0.4) : .clear, radius: 8)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .disabled(!canProceedToNextStep)
+                            .scaleEffect(canProceedToNextStep ? 1.0 : 0.95)
+                            .animation(.easeInOut(duration: 0.2), value: canProceedToNextStep)
+                        } else {
+                            Button(action: {
+                                viewModel.saveQuote()
+                                onSave(viewModel.currentQuote)
+                                dismiss()
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 18, weight: .semibold))
+                                    Text("Create Quote")
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 14)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.green, Color.blue]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .cornerRadius(12)
+                                .shadow(color: .green.opacity(0.4), radius: 8)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 20)
+                }
+                .background(Color(.systemBackground))
             }
-            .navigationTitle("New Quote")
+            .navigationTitle("")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.gray)
+                            Text("Cancel")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("New Quote")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.primary)
+                        Text("Event Planner")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
         }
-        .frame(minWidth: 800, minHeight: 600)
+    }
+    
+    private func stepBackgroundColor(for index: Int) -> Color {
+        if index < currentStep {
+            return .green
+        } else if index == currentStep {
+            return .blue
+        } else {
+            return Color.gray.opacity(0.2)
+        }
+    }
+    
+    private func stepTextColor(for index: Int) -> Color {
+        if index <= currentStep {
+            return .white
+        } else {
+            return .gray
+        }
     }
     
     private var canProceedToNextStep: Bool {
@@ -153,149 +311,267 @@ struct EventDetailsStepView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Event Details")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text("Fields marked with * are required")
-                        .font(.caption)
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 8) {
+                    Image(systemName: "calendar.badge.plus")
+                        .font(.system(size: 40))
+                        .foregroundColor(.blue)
+                    
+                    Text("Event Information")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Tell us about your event to create a personalized quote")
+                        .font(.system(size: 14))
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
                 }
-                .padding(.bottom)
+                .padding(.top, 20)
                 
-                // Client Information
-                GroupBox("Client Information") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Client Name *")
-                                    .font(.caption)
-                                    .foregroundColor(viewModel.currentQuote.event.clientName.isEmpty ? .red : .secondary)
-                                TextField("Enter client name", text: $viewModel.currentQuote.event.clientName)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .stroke(viewModel.currentQuote.event.clientName.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
-                                    )
+                // Client Information Card
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.blue)
+                        Text("Client Information")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                    
+                    VStack(spacing: 16) {
+                        // Client Name
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Client Name")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                Text("*")
+                                    .foregroundColor(.red)
                             }
                             
-                            VStack(alignment: .leading) {
-                                Text("Email")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                TextField("client@email.com", text: $viewModel.currentQuote.event.clientEmail)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                            }
+                            TextField("Enter client's full name", text: $viewModel.currentQuote.event.clientName)
+                                .font(.system(size: 16))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(
+                                            viewModel.currentQuote.event.clientName.isEmpty ? Color.red.opacity(0.5) : Color.blue.opacity(0.3),
+                                            lineWidth: viewModel.currentQuote.event.clientName.isEmpty ? 2 : 1
+                                        )
+                                )
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text("Phone")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextField("+1 (555) 123-4567", text: $viewModel.currentQuote.event.clientPhone)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                        }
-                    }
-                    .padding()
-                }
-                
-                // Event Information
-                GroupBox("Event Information") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Event Name *")
-                                    .font(.caption)
-                                    .foregroundColor(viewModel.currentQuote.event.eventName.isEmpty ? .red : .secondary)
-                                TextField("e.g., Sarah & John's Wedding", text: $viewModel.currentQuote.event.eventName)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                        HStack(spacing: 16) {
+                            // Email
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Email")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                TextField("client@email.com", text: $viewModel.currentQuote.event.clientEmail)
+                                    .font(.system(size: 16))
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 12)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(10)
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .stroke(viewModel.currentQuote.event.eventName.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
                                     )
                             }
                             
-                            VStack(alignment: .leading) {
+                            // Phone
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Phone")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                TextField("+1 (555) 123-4567", text: $viewModel.currentQuote.event.clientPhone)
+                                    .font(.system(size: 16))
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 12)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                    )
+                            }
+                        }
+                    }
+                }
+                .padding(20)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 10)
+                
+                // Event Details Card
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Image(systemName: "party.popper.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.purple)
+                        Text("Event Details")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                    
+                    VStack(spacing: 16) {
+                        // Event Name
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Event Name")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                Text("*")
+                                    .foregroundColor(.red)
+                            }
+                            
+                            TextField("e.g., Sarah & John's Wedding Celebration", text: $viewModel.currentQuote.event.eventName)
+                                .font(.system(size: 16))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(
+                                            viewModel.currentQuote.event.eventName.isEmpty ? Color.red.opacity(0.5) : Color.blue.opacity(0.3),
+                                            lineWidth: viewModel.currentQuote.event.eventName.isEmpty ? 2 : 1
+                                        )
+                                )
+                        }
+                        
+                        HStack(spacing: 16) {
+                            // Event Type
+                            VStack(alignment: .leading, spacing: 8) {
                                 Text("Event Type")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
                                 Picker("Event Type", selection: $viewModel.currentQuote.event.eventType) {
-                                    ForEach(EventType.allCases, id: \.self) { type in
-                                        HStack {
-                                            Image(systemName: type.icon)
-                                            Text(type.rawValue)
-                                        }
-                                        .tag(type)
-                                    }
+                                    Text("Wedding").tag("Wedding")
+                                    Text("Corporate").tag("Corporate")
+                                    Text("Birthday").tag("Birthday")
+                                    Text("Anniversary").tag("Anniversary")
+                                    Text("Other").tag("Other")
                                 }
                                 .pickerStyle(MenuPickerStyle())
-                            }
-                        }
-                        
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Event Date")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                DatePicker("", selection: $viewModel.currentQuote.event.eventDate, displayedComponents: [.date])
-                                    .datePickerStyle(CompactDatePickerStyle())
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                )
                             }
                             
-                            VStack(alignment: .leading) {
-                                Text("Duration (hours)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                TextField("4.0", value: $viewModel.currentQuote.event.duration, format: .number)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                            // Event Date
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Event Date")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                DatePicker("", selection: $viewModel.currentQuote.event.eventDate, displayedComponents: .date)
+                                    .datePickerStyle(CompactDatePickerStyle())
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 12)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                    )
                             }
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text("Venue *")
-                                .font(.caption)
-                                .foregroundColor(viewModel.currentQuote.event.venue.isEmpty ? .red : .secondary)
-                            TextField("e.g., Grand Ballroom, 123 Main St", text: $viewModel.currentQuote.event.venue)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        // Venue
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Venue")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                Text("*")
+                                    .foregroundColor(.red)
+                            }
+                            
+                            TextField("e.g., Grand Ballroom, 123 Main Street, City", text: $viewModel.currentQuote.event.venue)
+                                .font(.system(size: 16))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .stroke(viewModel.currentQuote.event.venue.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(
+                                            viewModel.currentQuote.event.venue.isEmpty ? Color.red.opacity(0.5) : Color.blue.opacity(0.3),
+                                            lineWidth: viewModel.currentQuote.event.venue.isEmpty ? 2 : 1
+                                        )
                                 )
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text("Guest Count *")
-                                .font(.caption)
-                                .foregroundColor(viewModel.currentQuote.event.guestCount <= 0 ? .red : .secondary)
+                        // Guest Count
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Expected Guests")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                Text("*")
+                                    .foregroundColor(.red)
+                            }
+                            
                             TextField("Number of guests", value: $viewModel.currentQuote.event.guestCount, format: .number)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .font(.system(size: 16))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .stroke(viewModel.currentQuote.event.guestCount <= 0 ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(
+                                            viewModel.currentQuote.event.guestCount <= 0 ? Color.red.opacity(0.5) : Color.blue.opacity(0.3),
+                                            lineWidth: viewModel.currentQuote.event.guestCount <= 0 ? 2 : 1
+                                        )
                                 )
                         }
                         
-                        VStack(alignment: .leading) {
+                        // Special Requirements
+                        VStack(alignment: .leading, spacing: 8) {
                             Text("Special Requirements")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.primary)
+                            
                             TextEditor(text: $viewModel.currentQuote.event.specialRequirements)
-                                .frame(height: 80)
+                                .font(.system(size: 16))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .frame(height: 100)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue.opacity(0.3), lineWidth: 1)
                                 )
                         }
                     }
-                    .padding()
                 }
+                .padding(20)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 10)
                 
-                Text("* Required fields")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Spacer(minLength: 40)
             }
-            .padding()
+            .padding(.horizontal, 20)
         }
+        .background(Color(.systemGray6).opacity(0.3))
     }
 }
 
@@ -303,126 +579,132 @@ struct ItemSelectionStepView: View {
     @ObservedObject var viewModel: QuoteViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Select Items & Services")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                // Search and Filter
-                HStack {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.secondary)
-                        TextField("Search items...", text: $viewModel.searchText)
-                    }
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+        ScrollView {
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 8) {
+                    Image(systemName: "list.bullet.clipboard")
+                        .font(.system(size: 40))
+                        .foregroundColor(.purple)
                     
-                    Picker("Category", selection: $viewModel.selectedCategory) {
-                        Text("All Categories").tag(nil as ItemCategory?)
-                        ForEach(ItemCategory.allCases, id: \.self) { category in
-                            HStack {
-                                Image(systemName: category.icon)
-                                Text(category.rawValue)
+                    Text("Select Services")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Choose the services you'd like to include in your quote")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                }
+                .padding(.top, 20)
+                
+                // Services Grid
+                LazyVGrid(columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ], spacing: 16) {
+                    ForEach(viewModel.availableItems, id: \.id) { item in
+                        ServiceCard(
+                            item: item,
+                            isSelected: viewModel.selectedItems.contains(where: { $0.id == item.id }),
+                            onToggle: {
+                                viewModel.toggleItemSelection(item)
                             }
-                            .tag(category as ItemCategory?)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(width: 200)
-                }
-            }
-            .padding()
-            
-            Divider()
-            
-            // Items List
-            ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(viewModel.filteredItems) { item in
-                        ItemSelectionRow(item: item, viewModel: viewModel)
+                        )
                     }
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                
+                Spacer(minLength: 40)
             }
         }
+        .background(Color(.systemGray6).opacity(0.3))
     }
 }
 
-struct ItemSelectionRow: View {
+struct ServiceCard: View {
     let item: QuoteItem
-    @ObservedObject var viewModel: QuoteViewModel
+    let isSelected: Bool
+    let onToggle: () -> Void
     
     var body: some View {
-        HStack {
-            // Selection Checkbox
-            Button(action: {
-                viewModel.toggleItemSelection(item)
-            }) {
-                Image(systemName: item.isSelected ? "checkmark.square.fill" : "square")
-                    .foregroundColor(item.isSelected ? .blue : .gray)
-                    .font(.title3)
-            }
-            .buttonStyle(PlainButtonStyle())
-            
-            // Category Icon
-            Image(systemName: item.category.icon)
-                .foregroundColor(Color(item.category.color))
-                .frame(width: 20)
-            
-            // Item Details
-            VStack(alignment: .leading, spacing: 2) {
+        Button(action: onToggle) {
+            VStack(spacing: 12) {
+                // Icon
+                Image(systemName: iconForCategory(item.category))
+                    .font(.system(size: 30))
+                    .foregroundColor(isSelected ? .white : .blue)
+                
+                // Name
                 Text(item.name)
-                    .font(.headline)
-                    .lineLimit(1)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(isSelected ? .white : .primary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
                 
-                if !item.description.isEmpty {
-                    Text(item.description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
-                }
+                // Price
+                Text("$\(String(format: "%.2f", item.price))")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(isSelected ? .white : .green)
                 
-                Text("\(item.unitPrice, format: .currency(code: "USD")) \(item.unit)")
-                    .font(.caption)
-                    .foregroundColor(.blue)
+                // Category
+                Text(item.category)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(isSelected ? .white.opacity(0.8) : .secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(isSelected ? Color.white.opacity(0.2) : Color.gray.opacity(0.1))
+                    .cornerRadius(8)
             }
-            
-            Spacer()
-            
-            // Quantity Controls
-            if item.isSelected {
-                HStack {
-                    Button("-") {
-                        viewModel.updateItemQuantity(item, quantity: item.quantity - 1)
-                    }
-                    .disabled(item.quantity <= 1)
-                    
-                    Text("\(item.quantity)")
-                        .frame(width: 30)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    Button("+") {
-                        viewModel.updateItemQuantity(item, quantity: item.quantity + 1)
-                    }
-                }
-                .buttonStyle(BorderedButtonStyle())
-                .controlSize(.small)
-                
-                Text(item.totalPrice, format: .currency(code: "USD"))
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                    .frame(width: 80, alignment: .trailing)
-            }
+            .padding(16)
+            .frame(height: 160)
+            .background(
+                isSelected ? 
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.blue, Color.purple]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ) :
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(.systemBackground), Color(.systemBackground)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(isSelected ? Color.clear : Color.gray.opacity(0.2), lineWidth: 1)
+            )
+            .shadow(color: isSelected ? .blue.opacity(0.3) : .black.opacity(0.05), radius: isSelected ? 8 : 4)
+            .scaleEffect(isSelected ? 1.02 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
-        .padding()
-        .background(item.isSelected ? Color.blue.opacity(0.1) : Color.clear)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(item.isSelected ? Color.blue : Color.gray.opacity(0.3), lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func iconForCategory(_ category: String) -> String {
+        switch category.lowercased() {
+        case "catering":
+            return "fork.knife.circle.fill"
+        case "decoration":
+            return "sparkles"
+        case "entertainment":
+            return "music.note"
+        case "photography":
+            return "camera.fill"
+        case "videography":
+            return "video.fill"
+        case "flowers":
+            return "leaf.fill"
+        case "lighting":
+            return "lightbulb.fill"
+        case "sound":
+            return "speaker.wave.3.fill"
+        default:
+            return "star.fill"
+        }
     }
 }
 
@@ -431,117 +713,85 @@ struct PricingStepView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Pricing & Adjustments")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.bottom)
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 8) {
+                    Image(systemName: "dollarsign.circle.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.green)
+                    
+                    Text("Pricing Overview")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Review and adjust pricing for selected services")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                }
+                .padding(.top, 20)
                 
-                // Selected Items Summary
-                GroupBox("Selected Items") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(viewModel.selectedItems) { item in
-                            HStack {
+                // Selected Items
+                VStack(spacing: 16) {
+                    ForEach(viewModel.selectedItems, id: \.id) { item in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
                                 Text(item.name)
-                                Spacer()
-                                Text("\(item.quantity) × \(item.unitPrice, format: .currency(code: "USD"))")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                Text(item.category)
+                                    .font(.system(size: 12))
                                     .foregroundColor(.secondary)
-                                Text(item.totalPrice, format: .currency(code: "USD"))
-                                    .fontWeight(.medium)
                             }
-                        }
-                        
-                        Divider()
-                        
-                        HStack {
-                            Text("Subtotal")
-                                .fontWeight(.semibold)
+                            
                             Spacer()
-                            Text(viewModel.currentQuote.subtotal, format: .currency(code: "USD"))
-                                .fontWeight(.semibold)
+                            
+                            Text("$\(String(format: "%.2f", item.price))")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.green)
                         }
+                        .padding(16)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.05), radius: 4)
                     }
-                    .padding()
                 }
-                
-                // Adjustments
-                GroupBox("Adjustments") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Discount (%)")
-                            Spacer()
-                            TextField("0.0", value: $viewModel.currentQuote.discountPercentage, format: .number)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 80)
-                            Text("-\(viewModel.currentQuote.discountAmount, format: .currency(code: "USD"))")
-                                .foregroundColor(.red)
-                                .frame(width: 80, alignment: .trailing)
-                        }
-                        
-                        HStack {
-                            Text("Additional Fees")
-                            Spacer()
-                            TextField("0.00", value: $viewModel.currentQuote.additionalFees, format: .currency(code: "USD"))
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 100)
-                        }
-                        
-                        HStack {
-                            Text("Tax (%)")
-                            Spacer()
-                            TextField("8.5", value: $viewModel.currentQuote.taxPercentage, format: .number)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .frame(width: 80)
-                            Text(viewModel.currentQuote.taxAmount, format: .currency(code: "USD"))
-                                .foregroundColor(.blue)
-                                .frame(width: 80, alignment: .trailing)
-                        }
-                    }
-                    .padding()
-                }
+                .padding(.horizontal, 20)
                 
                 // Total
-                GroupBox {
+                VStack(spacing: 16) {
+                    Divider()
+                    
                     HStack {
-                        Text("TOTAL AMOUNT")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        Spacer()
-                        Text(viewModel.currentQuote.totalAmount, format: .currency(code: "USD"))
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.blue)
-                    }
-                    .padding()
-                }
-                
-                // Quote Settings
-                GroupBox("Quote Settings") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Valid Until")
-                            Spacer()
-                            DatePicker("", selection: $viewModel.currentQuote.validUntil, displayedComponents: [.date])
-                                .datePickerStyle(CompactDatePickerStyle())
-                        }
+                        Text("Total Amount")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.primary)
                         
-                        VStack(alignment: .leading) {
-                            Text("Notes")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextEditor(text: $viewModel.currentQuote.notes)
-                                .frame(height: 60)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                )
-                        }
+                        Spacer()
+                        
+                        Text("$\(String(format: "%.2f", viewModel.totalAmount))")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.green)
                     }
-                    .padding()
+                    .padding(20)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.green.opacity(0.1), Color.blue.opacity(0.1)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(16)
+                    .shadow(color: .green.opacity(0.2), radius: 8)
                 }
+                .padding(.horizontal, 20)
+                
+                Spacer(minLength: 40)
             }
-            .padding()
         }
+        .background(Color(.systemGray6).opacity(0.3))
     }
 }
 
@@ -550,67 +800,110 @@ struct ReviewStepView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Review Quote")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.bottom)
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 8) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.green)
+                    
+                    Text("Review Quote")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Final review before creating your quote")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                }
+                .padding(.top, 20)
                 
-                // Validation Errors
-                if !viewModel.validationErrors.isEmpty {
-                    GroupBox {
-                        VStack(alignment: .leading, spacing: 4) {
+                // Event Summary
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Event Summary")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    VStack(spacing: 12) {
+                        InfoRow(label: "Event", value: viewModel.currentQuote.event.eventName)
+                        InfoRow(label: "Client", value: viewModel.currentQuote.event.clientName)
+                        InfoRow(label: "Date", value: DateFormatter.localizedString(from: viewModel.currentQuote.event.eventDate, dateStyle: .medium, timeStyle: .none))
+                        InfoRow(label: "Venue", value: viewModel.currentQuote.event.venue)
+                        InfoRow(label: "Guests", value: "\(viewModel.currentQuote.event.guestCount)")
+                    }
+                }
+                .padding(20)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 8)
+                .padding(.horizontal, 20)
+                
+                // Services Summary
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Selected Services")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    VStack(spacing: 8) {
+                        ForEach(viewModel.selectedItems, id: \.id) { item in
                             HStack {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
-                                Text("Please fix the following issues:")
-                                    .fontWeight(.medium)
-                            }
-                            
-                            ForEach(viewModel.validationErrors, id: \.self) { error in
-                                Text("• \(error)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                Text(item.name)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                Text("$\(String(format: "%.2f", item.price))")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.green)
                             }
                         }
-                        .padding()
+                        
+                        Divider()
+                        
+                        HStack {
+                            Text("Total")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Text("$\(String(format: "%.2f", viewModel.totalAmount))")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.green)
+                        }
                     }
-                    .background(Color.orange.opacity(0.1))
                 }
+                .padding(20)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 8)
+                .padding(.horizontal, 20)
                 
-                // Quote Preview
-                GroupBox("Quote Preview") {
-                    ScrollView {
-                        Text(viewModel.exportQuote())
-                            .font(.system(.body, design: .monospaced))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                    }
-                    .frame(height: 400)
-                    .background(Color(NSColor.textBackgroundColor))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                    )
-                }
-                
-                // Export Options
-                HStack {
-                    Button("Copy to Clipboard") {
-                        let pasteboard = NSPasteboard.general
-                        pasteboard.clearContents()
-                        pasteboard.setString(viewModel.exportQuote(), forType: .string)
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Spacer()
-                }
+                Spacer(minLength: 40)
             }
-            .padding()
         }
+        .background(Color(.systemGray6).opacity(0.3))
     }
 }
 
-#Preview {
-    NewQuoteView(quoteService: QuoteService()) { _ in }
+struct InfoRow: View {
+    let label: String
+    let value: String
+    
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.secondary)
+                .frame(width: 80, alignment: .leading)
+            
+            Text(value)
+                .font(.system(size: 14))
+                .foregroundColor(.primary)
+            
+            Spacer()
+        }
+    }
 }
