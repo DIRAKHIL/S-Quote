@@ -1,0 +1,1148 @@
+{
+  "generated_at": "2025-07-25T07:52:19.456629",
+  "total_issues": 125,
+  "by_severity": {
+    "low": 71,
+    "medium": 28,
+    "high": 26
+  },
+  "by_category": {
+    "localization": 39,
+    "maintainability": 8,
+    "documentation": 24,
+    "safety": 26,
+    "memory": 1,
+    "dependencies": 1,
+    "performance": 2,
+    "accessibility": 18,
+    "ui": 5,
+    "data_persistence": 1
+  },
+  "issues": [
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/ContentView.swift",
+      "line": 22,
+      "description": "Hardcoded string: 'S-Quote'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/ContentView.swift",
+      "line": 70,
+      "description": "Hardcoded string: 'Event Planner Quotation Generator'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/ContentView.swift",
+      "line": 74,
+      "description": "Hardcoded string: 'Select a quote from the sidebar or create a new one to get started'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/ContentView.swift",
+      "line": 16,
+      "description": "Function is 87 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S QuoteUITests/S_QuoteUITests.swift",
+      "line": 26,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S QuoteUITests/S_QuoteUITests.swift",
+      "line": 35,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S QuoteUITests/S_QuoteUITestsLaunchTests.swift",
+      "line": 21,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 45,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 94,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 184,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 185,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 186,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 188,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "potential_retain_cycle",
+      "severity": "medium",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 25,
+      "description": "Potential retain cycle in closure",
+      "suggestion": "Use [weak self] or [unowned self] in closure capture list",
+      "category": "memory"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 39,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 56,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 70,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 78,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 113,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 123,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 128,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 133,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 138,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 143,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 148,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 153,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 158,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/ViewModels/QuoteViewModel.swift",
+      "line": 164,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 194,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 205,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 210,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 233,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 239,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 161,
+      "description": "Function is 81 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 27,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 32,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 41,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 47,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 52,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 59,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "missing_documentation",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 161,
+      "description": "Public function missing documentation",
+      "suggestion": "Add /// documentation comments",
+      "category": "documentation"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 116,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 123,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 137,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 138,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 139,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 142,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 361,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 541,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 42,
+      "description": "Hardcoded string: '\\(index + 1)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 159,
+      "description": "Hardcoded string: 'Event Details'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 169,
+      "description": "Hardcoded string: 'Client Name *'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 177,
+      "description": "Hardcoded string: 'Email'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 186,
+      "description": "Hardcoded string: 'Phone'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 201,
+      "description": "Hardcoded string: 'Event Name *'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 209,
+      "description": "Hardcoded string: 'Event Type'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 227,
+      "description": "Hardcoded string: 'Event Date'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 235,
+      "description": "Hardcoded string: 'Duration (hours)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 244,
+      "description": "Hardcoded string: 'Venue *'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 252,
+      "description": "Hardcoded string: 'Guest Count *'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 260,
+      "description": "Hardcoded string: 'Special Requirements'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 274,
+      "description": "Hardcoded string: '* Required fields'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 290,
+      "description": "Hardcoded string: 'Select Items & Services'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 304,
+      "description": "Hardcoded string: 'All Categories'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 383,
+      "description": "Hardcoded string: '\\(item.quantity)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 416,
+      "description": "Hardcoded string: 'Pricing & Adjustments'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 438,
+      "description": "Hardcoded string: 'Subtotal'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 452,
+      "description": "Hardcoded string: 'Discount (%)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 463,
+      "description": "Hardcoded string: 'Additional Fees'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 471,
+      "description": "Hardcoded string: 'Tax (%)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 487,
+      "description": "Hardcoded string: 'TOTAL AMOUNT'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 503,
+      "description": "Hardcoded string: 'Valid Until'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 510,
+      "description": "Hardcoded string: 'Notes'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 535,
+      "description": "Hardcoded string: 'Review Quote'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 547,
+      "description": "Hardcoded string: 'Please fix the following issues:'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 552,
+      "description": "Hardcoded string: '\u2022 \\(error)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 26,
+      "description": "Function is 106 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 156,
+      "description": "Function is 124 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 338,
+      "description": "Function is 69 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 413,
+      "description": "Function is 113 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 532,
+      "description": "Function is 60 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 41,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 129,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 133,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 144,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 165,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 268,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "force_unwrapping",
+      "severity": "high",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 398,
+      "description": "Force unwrapping detected - potential crash risk",
+      "suggestion": "Use optional binding (if let) or nil coalescing (??)",
+      "category": "safety"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 83,
+      "description": "Hardcoded string: 'Created: \\(viewModel.currentQuote.createdDate, style: .date)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 93,
+      "description": "Hardcoded string: 'Valid until: \\(viewModel.currentQuote.validUntil, style: .date)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 146,
+      "description": "Hardcoded string: 'Special Requirements'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 215,
+      "description": "Hardcoded string: 'TOTAL'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 333,
+      "description": "Hardcoded string: 'Guests'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 345,
+      "description": "Hardcoded string: 'Discount (%)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 353,
+      "description": "Hardcoded string: 'Tax (%)'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 361,
+      "description": "Hardcoded string: 'Additional Fees'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "hardcoded_string",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 414,
+      "description": "Hardcoded string: 'Export Quote'",
+      "suggestion": "Consider using localized strings for better internationalization",
+      "category": "localization"
+    },
+    {
+      "type": "long_function",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 324,
+      "description": "Function is 79 lines long",
+      "suggestion": "Consider breaking down into smaller functions",
+      "category": "maintainability"
+    },
+    {
+      "type": "no_dependency_manager",
+      "severity": "low",
+      "file": ".",
+      "line": 0,
+      "description": "No dependency manager configuration found",
+      "suggestion": "Consider using Swift Package Manager for third-party dependencies",
+      "category": "dependencies"
+    },
+    {
+      "type": "inefficient_string_concat",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 223,
+      "description": "Inefficient string concatenation",
+      "suggestion": "Consider using String interpolation or StringBuilder",
+      "category": "performance"
+    },
+    {
+      "type": "inefficient_string_concat",
+      "severity": "low",
+      "file": "S Quote/Services/QuoteService.swift",
+      "line": 230,
+      "description": "Inefficient string concatenation",
+      "suggestion": "Consider using String interpolation or StringBuilder",
+      "category": "performance"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/ContentView.swift",
+      "line": 29,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/ContentView.swift",
+      "line": 79,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/ContentView.swift",
+      "line": 97,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "hardcoded_color",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 39,
+      "description": "Hardcoded color usage",
+      "suggestion": "Use semantic colors or asset catalog colors",
+      "category": "ui"
+    },
+    {
+      "type": "hardcoded_color",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 50,
+      "description": "Hardcoded color usage",
+      "suggestion": "Use semantic colors or asset catalog colors",
+      "category": "ui"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 93,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 101,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 110,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 118,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 341,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 378,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 387,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "hardcoded_color",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 401,
+      "description": "Hardcoded color usage",
+      "suggestion": "Use semantic colors or asset catalog colors",
+      "category": "ui"
+    },
+    {
+      "type": "hardcoded_color",
+      "severity": "low",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 404,
+      "description": "Hardcoded color usage",
+      "suggestion": "Use semantic colors or asset catalog colors",
+      "category": "ui"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/NewQuoteView.swift",
+      "line": 580,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 51,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 57,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "hardcoded_color",
+      "severity": "low",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 114,
+      "description": "Hardcoded color usage",
+      "suggestion": "Use semantic colors or asset catalog colors",
+      "category": "ui"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 388,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 394,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 431,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 438,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "missing_accessibility",
+      "severity": "medium",
+      "file": "S Quote/Views/QuoteDetailView.swift",
+      "line": 445,
+      "description": "Button missing accessibility label",
+      "suggestion": "Add .accessibilityLabel() modifier",
+      "category": "accessibility"
+    },
+    {
+      "type": "userdefaults_for_complex_data",
+      "severity": "medium",
+      "file": "Data Persistence",
+      "line": 0,
+      "description": "Using UserDefaults for complex data storage",
+      "suggestion": "Consider Core Data or SQLite for complex data relationships",
+      "category": "data_persistence"
+    }
+  ]
+}
