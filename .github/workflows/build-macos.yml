@@ -1,0 +1,253 @@
+name: Build macOS App
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ created ]
+
+env:
+  XCODE_VERSION: '16.4'
+  MACOS_VERSION: '15.5'
+
+jobs:
+  build:
+    runs-on: macos-15
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ env.XCODE_VERSION }}
+        
+    - name: Show Xcode version
+      run: xcodebuild -version
+      
+    - name: Show macOS version
+      run: sw_vers
+      
+    - name: Cache build artifacts
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/Library/Developer/Xcode/DerivedData
+          build/
+        key: ${{ runner.os }}-xcode-${{ hashFiles('**/*.xcodeproj') }}
+        restore-keys: |
+          ${{ runner.os }}-xcode-
+          
+    - name: Install dependencies
+      run: |
+        # Install any required dependencies here
+        echo "Installing dependencies..."
+        
+    - name: Run tests
+      run: |
+        xcodebuild test \
+          -project "S Quote.xcodeproj" \
+          -scheme "S-Quote" \
+          -destination 'platform=macOS'
+          
+    - name: Build app
+      run: |
+        xcodebuild -project "S Quote.xcodeproj" \
+          -scheme "S-Quote" \
+          -configuration Release \
+          clean build
+          
+    - name: Archive app
+      run: |
+        xcodebuild -project "S Quote.xcodeproj" \
+          -scheme "S-Quote" \
+          -configuration Release \
+          -archivePath "./build/S-Quote.xcarchive" \
+          archive
+          
+    - name: Export app
+      run: |
+        # Create export options
+        mkdir -p build
+        cat > build/ExportOptions.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>method</key>
+            <string>mac-application</string>
+            <key>destination</key>
+            <string>export</string>
+        </dict>
+        </plist>
+        EOF
+        
+        xcodebuild -exportArchive \
+          -archivePath "./build/S-Quote.xcarchive" \
+          -exportPath "./build/export" \
+          -exportOptionsPlist "./build/ExportOptions.plist"
+          
+    - name: Create DMG
+      run: |
+        APP_NAME="S-Quote.app"
+        DMG_NAME="S-Quote-${{ github.sha }}.dmg"
+        
+        if [ -d "./build/export/$APP_NAME" ]; then
+          # Create temporary DMG directory
+          mkdir -p "./build/dmg"
+          
+          # Copy app to DMG directory
+          cp -R "./build/export/$APP_NAME" "./build/dmg/"
+          
+          # Create Applications symlink
+          ln -s /Applications "./build/dmg/Applications"
+          
+          # Create DMG
+          hdiutil create -volname "S-Quote" \
+            -srcfolder "./build/dmg" \
+            -ov -format UDZO \
+            "./build/$DMG_NAME"
+            
+          echo "DMG created: ./build/$DMG_NAME"
+        fi
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: S-Quote-macOS-${{ github.sha }}
+        path: |
+          build/*.dmg
+          build/export/
+        retention-days: 30
+        
+    - name: Upload to S3 (Release only)
+      if: github.event_name == 'release'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      run: |
+        if [ -n "$AWS_S3_BUCKET" ] && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+          # Install AWS CLI if not present
+          if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+            sudo installer -pkg AWSCLIV2.pkg -target /
+          fi
+          
+          # Upload DMG to S3
+          DMG_FILE=$(find build -name "*.dmg" | head -n 1)
+          if [ -f "$DMG_FILE" ]; then
+            aws s3 cp "$DMG_FILE" "s3://$AWS_S3_BUCKET/releases/" --region us-east-1
+            echo "Uploaded to S3: s3://$AWS_S3_BUCKET/releases/$(basename $DMG_FILE)"
+          fi
+        else
+          echo "S3 credentials not configured, skipping upload"
+        fi
+        
+    - name: Create Release Assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          build/*.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  analyze:
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ env.XCODE_VERSION }}
+        
+    - name: Run static analysis
+      run: |
+        xcodebuild analyze \
+          -project "S Quote.xcodeproj" \
+          -scheme "S-Quote" \
+          -configuration Debug
+          
+    - name: Check code coverage
+      run: |
+        xcodebuild test \
+          -project "S Quote.xcodeproj" \
+          -scheme "S-Quote" \
+          -destination 'platform=macOS' \
+          -enableCodeCoverage YES \
+          -derivedDataPath ./build/DerivedData
+          
+    - name: Generate coverage report
+      run: |
+        xcrun xccov view --report --json ./build/DerivedData/Logs/Test/*.xcresult > coverage.json || true
+        
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-${{ github.sha }}
+        path: coverage.json
+        retention-days: 7
+
+  quality-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        
+    - name: Run code analysis
+      run: |
+        python3 analyze-issues.py
+        
+    - name: Upload analysis report
+      uses: actions/upload-artifact@v4
+      with:
+        name: analysis-report-${{ github.sha }}
+        path: |
+          ANALYSIS_REPORT.md
+          ANALYSIS_REPORT.json
+        retention-days: 30
+        
+    - name: Check for critical issues
+      run: |
+        python3 -c "
+        import json
+        import sys
+        
+        try:
+            with open('ANALYSIS_REPORT.json', 'r') as f:
+                data = json.load(f)
+            
+            critical = data.get('by_severity', {}).get('critical', 0)
+            high = data.get('by_severity', {}).get('high', 0)
+            
+            print(f'Critical issues: {critical}')
+            print(f'High priority issues: {high}')
+            
+            if critical > 0:
+                print('❌ Critical issues found - build should be reviewed')
+                sys.exit(1)
+            elif high > 10:
+                print('⚠️ Many high priority issues found - consider addressing')
+                sys.exit(0)
+            else:
+                print('✅ No critical issues found')
+                sys.exit(0)
+                
+        except Exception as e:
+            print(f'Could not analyze issues: {e}')
+            sys.exit(0)
+        "
