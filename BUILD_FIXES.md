@@ -79,13 +79,21 @@ if quote != nil {
    - ✅ Fixed unused variable warning
    - ✅ Simplified conditional check
 
+### Views Updated
+5. **QuoteDetailView.swift**
+   - ✅ Fixed Event initialization in preview
+   - ✅ Updated to use new Event() initializer
+   - ✅ Fixed contextual base inference for .wedding enum
+
 ## 🎯 Build Status
 
 ### Before Fixes
-❌ **3 Compilation Errors**
+❌ **5 Compilation Errors**
 - Quote Hashable conformance missing
 - List selection not working
 - Tag method requiring Hashable
+- Event() argument error in QuoteDetailView
+- .wedding contextual inference error
 
 ❌ **4 Warnings**
 - 3 Codable UUID warnings
