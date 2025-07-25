@@ -45,7 +45,6 @@ struct QuoteDetailView: View {
             .padding()
         }
         .navigationTitle(viewModel.currentQuote.event.eventName.isEmpty ? "Untitled Event" : viewModel.currentQuote.event.eventName)
-        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button("Export") {
@@ -139,7 +138,7 @@ struct QuoteDetailView: View {
                 DetailRow(label: "Event Date", value: viewModel.currentQuote.event.eventDate.formatted(date: .complete, time: .omitted))
                 DetailRow(label: "Venue", value: viewModel.currentQuote.event.venue)
                 DetailRow(label: "Guests", value: "\(viewModel.currentQuote.event.guestCount)")
-                DetailRow(label: "Duration", value: "\(viewModel.currentQuote.event.duration, specifier: "%.1f") hours")
+                DetailRow(label: "Duration", value: String(format: "%.1f hours", viewModel.currentQuote.event.duration))
                 
                 if !viewModel.currentQuote.event.specialRequirements.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
@@ -193,7 +192,7 @@ struct QuoteDetailView: View {
                 
                 if viewModel.currentQuote.discountPercentage > 0 {
                     PricingRow(
-                        label: "Discount (\(viewModel.currentQuote.discountPercentage, specifier: "%.1f")%)",
+                        label: "Discount (\(String(format: "%.1f", viewModel.currentQuote.discountPercentage))%)",
                         amount: -viewModel.currentQuote.discountAmount,
                         color: .red
                     )
@@ -204,7 +203,7 @@ struct QuoteDetailView: View {
                 }
                 
                 PricingRow(
-                    label: "Tax (\(viewModel.currentQuote.taxPercentage, specifier: "%.1f")%)",
+                    label: "Tax (\(String(format: "%.1f", viewModel.currentQuote.taxPercentage))%)",
                     amount: viewModel.currentQuote.taxAmount,
                     color: .blue
                 )
@@ -382,7 +381,6 @@ struct EditQuoteView: View {
                 }
             }
             .navigationTitle("Edit Quote")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

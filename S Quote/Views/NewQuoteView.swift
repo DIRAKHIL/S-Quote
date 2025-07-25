@@ -126,7 +126,6 @@ struct NewQuoteView: View {
                 .padding()
             }
             .navigationTitle("New Quote")
-            .navigationBarTitleDisplayMode(.inline)
         }
         .frame(minWidth: 800, minHeight: 600)
     }
