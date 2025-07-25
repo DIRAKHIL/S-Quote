@@ -84,7 +84,6 @@ struct NewQuoteView: View {
                     ReviewStepView(viewModel: viewModel)
                         .tag(3)
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 
                 Divider()
                 
