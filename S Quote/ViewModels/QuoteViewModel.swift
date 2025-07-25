@@ -30,7 +30,7 @@ class QuoteViewModel: ObservableObject {
         }
         
         // If editing existing quote, mark selected items
-        if let existingQuote = quote {
+        if quote != nil {
             updateSelectedItems()
         }
     }

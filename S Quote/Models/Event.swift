@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Event: Identifiable, Codable {
-    let id = UUID()
+struct Event: Identifiable, Codable, Hashable {
+    let id: UUID
     var clientName: String = ""
     var clientEmail: String = ""
     var clientPhone: String = ""
@@ -20,6 +20,10 @@ struct Event: Identifiable, Codable {
     var duration: Double = 4.0 // hours
     var specialRequirements: String = ""
     var createdDate: Date = Date()
+    
+    init() {
+        self.id = UUID()
+    }
 }
 
 enum EventType: String, CaseIterable, Codable {

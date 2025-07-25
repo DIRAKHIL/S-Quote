@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Quote: Identifiable, Codable {
-    let id = UUID()
+struct Quote: Identifiable, Codable, Hashable {
+    let id: UUID
     var event: Event
     var items: [QuoteItem]
     var discountPercentage: Double = 0.0
@@ -46,6 +46,12 @@ struct Quote: Identifiable, Codable {
         let dateString = formatter.string(from: createdDate)
         let shortId = String(id.uuidString.prefix(8)).uppercased()
         return "QT-\(dateString)-\(shortId)"
+    }
+    
+    init(event: Event, items: [QuoteItem] = []) {
+        self.id = UUID()
+        self.event = event
+        self.items = items
     }
 }
 

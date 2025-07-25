@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct QuoteItem: Identifiable, Codable {
-    let id = UUID()
+struct QuoteItem: Identifiable, Codable, Hashable {
+    let id: UUID
     var name: String
     var description: String
     var category: ItemCategory
@@ -19,6 +19,16 @@ struct QuoteItem: Identifiable, Codable {
     
     var totalPrice: Double {
         return unitPrice * Double(quantity)
+    }
+    
+    init(name: String, description: String, category: ItemCategory, unitPrice: Double, quantity: Int = 1, unit: String) {
+        self.id = UUID()
+        self.name = name
+        self.description = description
+        self.category = category
+        self.unitPrice = unitPrice
+        self.quantity = quantity
+        self.unit = unit
     }
 }
 
