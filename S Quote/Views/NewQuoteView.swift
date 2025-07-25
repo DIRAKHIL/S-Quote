@@ -154,10 +154,15 @@ struct EventDetailsStepView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Event Details")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.bottom)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Event Details")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    Text("Fields marked with * are required")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.bottom)
                 
                 // Client Information
                 GroupBox("Client Information") {
@@ -166,9 +171,13 @@ struct EventDetailsStepView: View {
                             VStack(alignment: .leading) {
                                 Text("Client Name *")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(viewModel.currentQuote.event.clientName.isEmpty ? .red : .secondary)
                                 TextField("Enter client name", text: $viewModel.currentQuote.event.clientName)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .stroke(viewModel.currentQuote.event.clientName.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                    )
                             }
                             
                             VStack(alignment: .leading) {
@@ -177,6 +186,8 @@ struct EventDetailsStepView: View {
                                     .foregroundColor(.secondary)
                                 TextField("client@email.com", text: $viewModel.currentQuote.event.clientEmail)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .keyboardType(.emailAddress)
+                                    .autocapitalization(.none)
                             }
                         }
                         
@@ -184,8 +195,9 @@ struct EventDetailsStepView: View {
                             Text("Phone")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            TextField("Phone number", text: $viewModel.currentQuote.event.clientPhone)
+                            TextField("+1 (555) 123-4567", text: $viewModel.currentQuote.event.clientPhone)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.phonePad)
                         }
                     }
                     .padding()
@@ -198,9 +210,13 @@ struct EventDetailsStepView: View {
                             VStack(alignment: .leading) {
                                 Text("Event Name *")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
-                                TextField("Enter event name", text: $viewModel.currentQuote.event.eventName)
+                                    .foregroundColor(viewModel.currentQuote.event.eventName.isEmpty ? .red : .secondary)
+                                TextField("e.g., Sarah & John's Wedding", text: $viewModel.currentQuote.event.eventName)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .stroke(viewModel.currentQuote.event.eventName.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                    )
                             }
                             
                             VStack(alignment: .leading) {
@@ -241,17 +257,25 @@ struct EventDetailsStepView: View {
                         VStack(alignment: .leading) {
                             Text("Venue *")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextField("Enter venue name/address", text: $viewModel.currentQuote.event.venue)
+                                .foregroundColor(viewModel.currentQuote.event.venue.isEmpty ? .red : .secondary)
+                            TextField("e.g., Grand Ballroom, 123 Main St", text: $viewModel.currentQuote.event.venue)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .stroke(viewModel.currentQuote.event.venue.isEmpty ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                )
                         }
                         
                         VStack(alignment: .leading) {
                             Text("Guest Count *")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(viewModel.currentQuote.event.guestCount <= 0 ? .red : .secondary)
                             TextField("Number of guests", value: $viewModel.currentQuote.event.guestCount, format: .number)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .stroke(viewModel.currentQuote.event.guestCount <= 0 ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+                                )
                         }
                         
                         VStack(alignment: .leading) {
