@@ -5,8 +5,19 @@
 ### 2025-07-25 - Initial Pipeline Trigger
 - **Trigger**: Manual push to main branch
 - **Purpose**: Test automated CI/CD pipeline after fixing all compilation errors
-- **Status**: ⏳ Running
+- **Status**: ✅ Fixed additional macOS compilation errors
 - **Expected**: ✅ Successful build with DMG generation
+
+### 2025-07-25 - macOS Compilation Fixes
+- **Issue**: User reported 4 compilation errors in local Xcode build
+- **Errors Fixed**:
+  - ❌ `navigationBarTitleDisplayMode` unavailable in macOS (3 instances)
+  - ❌ Extra argument 'specifier' in string interpolation (2 instances)
+- **Solution**: 
+  - Removed iOS-only `navigationBarTitleDisplayMode` modifiers
+  - Replaced `specifier:` with `String(format:)` for macOS compatibility
+- **Status**: ✅ All errors resolved and pushed
+- **Commit**: 6dc4eb6
 
 ### Build Fixes Applied
 - ✅ Fixed all Swift compilation errors
