@@ -13,9 +13,9 @@ Your S-Quote app now has enhanced user experience with professional form validat
 - **Real-time validation** as you type
 - **Clear indicators** for what needs to be completed
 
-### 2. **Smart Input Assistance**
-- **Email field**: Automatically suggests email keyboard
-- **Phone field**: Shows number pad for easier entry
+### 2. **Professional Input Fields**
+- **Email field**: Professional email placeholder format
+- **Phone field**: Standard phone number format example
 - **Better placeholders** with realistic examples
 
 ### 3. **Professional Placeholders**
@@ -43,8 +43,8 @@ git pull origin main
 5. **Click "Next"** - should proceed to Step 2
 
 ### Test Input Types
-1. **Email field**: Notice email keyboard appears
-2. **Phone field**: Notice number pad appears
+1. **Email field**: Professional email format placeholder
+2. **Phone field**: Standard phone format placeholder
 3. **Event Date**: Test date picker functionality
 4. **Guest Count**: Test number input validation
 
@@ -78,7 +78,7 @@ The app validates these required fields before allowing progression:
 |---------|--------|-------|
 | **Validation** | No visual feedback | Red highlighting for errors |
 | **Placeholders** | Generic text | Professional examples |
-| **Input Types** | Standard keyboard | Smart keyboard selection |
+| **Input Types** | Standard keyboard | Professional placeholders |
 | **Required Fields** | No clear indication | Clear * markers + validation |
 | **User Guidance** | Minimal | Helpful instructions |
 
